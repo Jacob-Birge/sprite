@@ -1,0 +1,95 @@
+<html>
+<head>
+    <style>
+        #sprite{
+            cursor: none;
+        }
+        #image{
+            cursor: none;
+        }
+    </style>
+</head>
+<body>
+    <div id="sprite">
+        <p id="image"> </p>
+    </div>
+    <script>
+        var sprite = document.getElementById("sprite");
+        sprite.style.position = "absolute";
+        sprite.style.top = "100px";
+        sprite.style.left = "100px";
+        sprite.style.height = "40px";
+        sprite.style.width = "40px";
+        sprite.style.backgroundImage = "url('./sprite1.jpg')";
+        sprite.style.backgroundPositionX = "0px";
+        sprite.style.backgroundPositionY = "0px";
+        var nextSpriteX = 340 / 9;
+        var nextSpriteY = 282 / 7;
+        const walkRightYIndex = 9;
+        var walkRightXIndex = 0;
+
+        var upIndex = 0;
+        var downIndex = 1;
+        var leftIndex = 2;
+        var rightIndex = 3;
+        var keysPressed = [ false, false, false, false ];
+        onkeydown = onkeyup = function (e) {
+            updatePressed(e);
+
+            updatePosition();
+        };
+
+        function updatePressed(e){
+            if (e.key == "ArrowUp") {
+                keysPressed[upIndex] = e.type == 'keydown';
+            }
+            if (e.key == "ArrowDown") {
+                keysPressed[downIndex] = e.type == 'keydown';
+            }
+            if (e.key == "ArrowLeft") {
+                keysPressed[leftIndex] = e.type == 'keydown';
+            }
+            if (e.key == "ArrowRight") {
+                keysPressed[rightIndex] = e.type == 'keydown';
+            }
+            if (!(keysPressed[0] || keysPressed[1] || keysPressed[2] || keysPressed[3])) {
+                sprite.style.backgroundPositionX = "0px";
+                sprite.style.backgroundPositionY = "0px";
+            }
+        }
+
+        function updatePosition(){
+            var distance = 10;
+            if (keysPressed[upIndex]) {
+                sprite.style.top = (sprite.offsetTop - distance) + "px";
+                updateBackground(6, 9);
+            }
+            if (keysPressed[downIndex]) {
+                sprite.style.top = (sprite.offsetTop + distance) + "px";
+                updateBackground(4, 9);
+            }
+            if (keysPressed[leftIndex]) {
+                sprite.style.left = (sprite.offsetLeft - distance) + "px";
+                updateBackground(5, 9);
+            }
+            if (keysPressed[rightIndex]) {
+                sprite.style.left = (sprite.offsetLeft + distance) + "px";
+                updateBackground(7, 9);
+            }
+        }
+
+        function updateBackground(directionIndex, numPositions) {
+            var bgX = sprite.style.backgroundPositionX;
+            var bgXNum = parseFloat(bgX.substring(0, bgX.length - 2));
+            bgXNum = bgXNum * -1;
+            bgXNum += nextSpriteX;
+            if (bgXNum > nextSpriteX * numPositions) {
+                bgXNum = 0;
+            }
+            var bgYNum = nextSpriteY * directionIndex;
+            sprite.style.backgroundPositionX = "-" + bgXNum.toString() + "px";
+            sprite.style.backgroundPositionY = "-" + bgYNum.toString() + "px";
+        }
+    </script>
+</body>
+</html>
